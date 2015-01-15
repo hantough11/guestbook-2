@@ -1,0 +1,126 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+
+    <head>
+        <script language="javascript" type="text/javascript" src="../websrc/js/key/keycode.js"></script>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script>
+            var verification_code = null;
+            var result_data = null;
+            var myurl = location.href.replace("#", "") + "device";
+
+            $.ajax({
+                type: "POST",
+                url: myurl,
+                data: 'step=4',
+                dataType: 'text',
+                success: function (result) {
+                    if (result != '')
+                        document.location.href = "/main";
+                }
+            });
+
+            function step1(interval) {
+                document.getElementById("popupLogin").style.display = "block";
+                $("#deviceCode").html("<p>Loading..</p>");
+                $.ajax({
+                    type: "POST",
+                    url: myurl,
+                    data: 'step=1',
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.user_code) {
+                            $("#deviceCode").html("<p>" + result.user_code + "</p>");
+                            verification_code = result.device_code;
+                            step2(interval);
+                        } else {
+                            setTimeout(function () {
+                                step1(interval);
+                            }, interval * 1000);
+                        }
+                    }
+                });
+            }
+
+            function step2(interval) {
+                console.log("step2");
+                $.ajax({
+                    type: "POST",
+                    url: myurl,
+                    data: 'step=2&code=' + verification_code,
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.access_token) {
+                            step3(result.access_token, result.refresh_token);
+                        } else {
+                            setTimeout(function () {
+                                step2(interval);
+                            }, interval * 1000);
+                        }
+                    }
+                });
+            }
+
+            function step3(token, r_token) {
+                console.log("step3");
+                $.ajax({
+                    type: "POST",
+                    url: myurl,
+                    data: 'step=3&token=' + token + '&r_token=' + r_token,
+                    dataType: 'text',
+                    success: function (result) {
+                        location.href = "./signin";
+                    }
+                });
+            }
+
+            function closePopup() {
+                document.getElementById("popupLogin").style.display = "none";
+            }
+
+            function keyDown(event) {
+                var keyCode;
+                keyCode = event.which;
+                if (keyCode == VK_ENTER) {
+                    if ($("#popupLogin").is(":visible")) {
+                        closePopup();
+                    }
+                    else {
+                        step1(2);
+                    }
+                }
+            }
+            $(".intro #popupLogin #closePopup").click(function () {
+                document.getElementById("popupLogin").style.display = "none";
+            });
+        </script>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="../websrc/css/style_common.css" />
+        <title>VER 1.0b</title>
+
+    </head>
+    <body onkeydown="keyDown(event);">
+        <div class="intro">
+            <a href="#" onclick="step1(2);"><div class="btnSign"></div></a>
+            <div id="popupLogin">
+                <div id="closePopup"></div>
+                <div id="deviceCode"></div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+    
+
+
+
+
+

@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="../websrc/css/style_common.css" />
+        <title>VER 1.0b</title>
+    </head>
+<body>
+    <div>
+        <div class="intro">
+            <a href="#" onclick="step1(2);"><div id="authorize-button" style="visibility: hidden" class="btnSign"></div></a>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        //var clientId = '541405025964-6qhiqh0uihcr1lricqgeboge3c74ojhn.apps.googleusercontent.com';
+        //var apiKey = 'AIzaSyA9jVHERQ7lo7Vd2jww4jep9xqhoKXcOns';
+        var clientId = '792310793065-6rnor8jge4k83norti3aksv9rd5r4clo.apps.googleusercontent.com';
+        var apiKey = 'AIzaSyBRA9_OUz-0yJmX6TI8jHO3p6dUF0-7hUI';
+        var scopes = 'https://www.googleapis.com/auth/youtube';
+
+        function handleClientLoad() {
+            gapi.client.setApiKey(apiKey);
+            window.setTimeout(checkAuth, 1);
+        }
+
+        function checkAuth() {
+            gapi.auth.authorize({ client_id: clientId, scope: scopes, immediate: true }, handleAuthResult);
+        }
+
+        function handleAuthResult(authResult) {
+            var authorizeButton = document.getElementById('authorize-button');
+            if (authResult && !authResult.error) {
+                authorizeButton.style.visibility = 'hidden';
+
+                location.href = "./signin";
+                //makeApiCall();
+            } else {
+                authorizeButton.style.visibility = '';
+                authorizeButton.onclick = handleAuthClick;
+            }
+        }
+
+        function handleAuthClick(event) {
+            gapi.auth.authorize({ client_id: clientId, scope: scopes, immediate: false }, handleAuthResult);
+            return false;
+        }
+
+        function makeApiCall() {
+            gapi.client.load('plus', 'v1', function () {
+                var request = gapi.client.plus.people.get({
+                    'userId': 'me'
+                });
+                request.execute(function (resp) {
+                    var heading = document.createElement('h4');
+                    var image = document.createElement('img');
+                    image.src = resp.image.url;
+                    heading.appendChild(image);
+                    heading.appendChild(document.createTextNode(resp.displayName));
+
+                    document.getElementById('content').appendChild(heading);
+                });
+            });
+        }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <div id="content"></div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+﻿@charset "utf-8";
+
+
+/* -------------------------0. 공통 -------------------------*/
+a{
+	margin:0px;
+	text-decoration:none;
+}
+body{	
+	background-position:50% 50%;
+	background-color:#222222;
+	position:relative;
+	width:542px;
+	height:289px;
+	margin:0 auto;
+}
+.upload_background{
+	background-image:url('../img/main/upload_back.png');
+	background-repeat:no-repeat;
+	display:block;
+	width:542px;
+	height:289px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+
+.upload_background .btn_file_wrapper_back  {
+    background:url('../img/main/upload_btn_center_off.png') no-repeat;
+	display:block;
+	width:361px;
+	height:40px;
+	position:absolute;
+	top:100px;
+	left:90px;
+    overflow: hidden;
+}
+
+.upload_background .btn_file_wrapper_back:hover  {
+    background:url('../img/main/upload_btn_center_hover.png') no-repeat;
+	display:block;
+	width:361px;
+	height:40px;
+	position:absolute;
+	top:100px;
+	left:90px;
+    overflow: hidden;
+}
+
+
+.upload_background .btn_file_wrapper  {
+    background:url('../img/main/upload_btn_select.png') no-repeat;
+	display:block;
+	width:361px;
+	height:40px;
+	position:absolute;
+	top:100px;
+	left:90px;
+    overflow: hidden;
+}
+.upload_background .btn_file_wrapper:hover  {
+    background:url('../img/main/upload_btn_select_focus.png') no-repeat;
+	display:block;
+	width:361px;
+	height:40px;
+	position:absolute;
+	top:100px;
+	left:90px;
+    overflow: hidden;
+}
+.upload_background .btn_file_wrapper .btn_file {
+	border:none;    
+	display:block;
+	width:361px;
+	height:40px;
+	opacity: 0;
+    overflow: hidden;
+    cursor:pointer;
+}
+.upload_background .btn_upload {
+	border:none;
+    background:url('../img/main/upload_btn_upload.png') no-repeat;
+	display:block;
+	width:177px;
+	height:40px;
+	position:absolute;
+	top:238px;
+	left:84px;
+    cursor:pointer;
+}
+.upload_background .btn_upload:hover {
+	border:none;
+    background:url('../img/main/upload_btn_upload_focus.png') no-repeat;
+	display:block;
+	width:177px;
+	height:40px;
+	position:absolute;
+	top:238px;
+	left:84px;
+    cursor:pointer;
+}
+.upload_background .file_name {    
+    cursor:pointer;
+	width:361px;
+	height:40px;
+    text-align:center;
+	color:#eee;
+    font-size:16px;
+    font-weight:bold;
+}
+
+
+.upload_background .btn_close {
+    background:url('../img/main/upload_btn_cancel.png') no-repeat;
+	display:block;
+	width:177px;
+	height:40px;
+	position:absolute;
+	top:238px;
+	left:281px;
+    cursor:pointer;
+}
+.upload_background .btn_close:hover {
+    background:url('../img/main/upload_btn_cancel_focus.png') no-repeat;
+	display:block;
+	width:177px;
+	height:40px;
+	position:absolute;
+	top:238px;
+	left:281px;
+    cursor:pointer;
+}
+.loading {
+	display:none;
+	position:absolute;
+	width:542px;
+	height:289px;
+}
+.loading_back {
+	background-color:#000;
+	display:block;
+	position:absolute;
+	width:542px;
+	height:289px;
+	opacity:0.7;
+}
+.loading_icon {
+	display:none;
+	background:url('../img/main/icon_loading.gif');	
+    background-size:80px 80px;
+	width:81px;
+	height:75px;
+	position:relative;
+	top:127px;
+	left:228px;	
+    z-index:9999;
+}
+.loading_text{
+	color:#fff;
+	font-size:30px;
+	font-weight:bold;
+	font-family:arial;
+	text-align:center;
+	position:relative;
+	width:542px;
+	top:86px;
+}
+
+.status{
+	display: none;
+	padding: 5px;
+	background: #F47063;
+	width: 100%;
+	color: white;
+	margin: 8px 0;
+}
+
+.progress {
+	position: relative;
+	width: 90%;
+	margin: 10px auto;
+	border: 1px solid #DDD;
+	padding: 5px;
+	border-radius: 3px;
+}
+.bar{
+	background: #008DE6;
+	height: 20px;
+	width: 0%;
+	/* transition animation */
+	-webkit-transition: width .3s;
+		-moz-transition: width .3s;
+			transition: width .3s;
+
+}
+.percent {
+	position: absolute;
+	display: inline-block;
+	top: 6px;
+	left: 48%;
+	color: #333;
+}
+
+
+.upload_background .caution{
+    background:url('../img/main/upload_btn_tip.png') no-repeat;	
+   	position:absolute;
+	top:160px;
+	left:100px;
+    color:white;
+    padding-left:30px;
+    font-size:14px;
+    font-weight:bold;
+}

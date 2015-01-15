@@ -1,0 +1,124 @@
+﻿<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../websrc/css/upload.css" />
+    <link href='http://fonts.googleapis.com/css?family=Alfa+Slab+One' rel='stylesheet' type='text/css' />
+    <script language="javascript" type="text/javascript" src="../websrc/js/jquery/jquery-1.8.2.js"></script>
+    <script language="javascript" type="text/javascript" src="../websrc/js/jquery/jquery-ui.js"></script>
+    <script language="javascript" type="text/javascript" src="../websrc/js/jquery/jquery.jcarousel.min.js"></script>
+    <title>VER 1.0b</title>
+</head>
+<body>
+    <div class="upload_background">
+        <form action="<?php echo $upload_url?>" onsubmit="showLoading();" enctype="multipart/form-data" method="post">
+            <div class="btn_file_wrapper_back">
+                <div class="file_name"></div>
+            </div>
+            <div class="btn_file_wrapper">
+                <input class="btn_file" id="files" type="file" name="uploaded_files[]" multiple=multiple onchange="reviewUploadImg(this)" />
+            </div>
+            <div class="caution"></div>
+            <input class="btn_upload" type="submit" value="" />
+        </form>
+        <div class="btn_close"></div>
+    </div>
+    <div class="loading">
+        <div class="loading_back"></div>
+        <div class="loading_text"></div>
+    </div>
+    <div class="loading_icon"></div>
+</body>
+<script>
+    var usedDataSize = 0;
+    var uploadSize = 0;
+    var sizeToString = new String();
+
+    $(document).ready(function () {
+        $('body').css("zoom", parent.$('body').css("zoom"));
+    });
+
+    $(".upload_background .file_name").click(function () {
+        $(".upload_background .btn_file").click();
+    });
+
+
+    function reviewUploadImg(fileObj) {
+        var files = document.getElementById("files").files;
+        var count = files.length;
+        var imageType = /image.*/;
+
+        if (count > 20)
+        {
+            $(".upload_background .file_name").text("Over 20 Image selected");
+            return;
+        }
+
+        for (i = 0; i < count; i++)
+        {
+            if(!files[i].type.match(imageType))
+            {
+                $(".upload_background .file_name").text("Image File Error");
+                return;
+            }
+            uploadSize += files[i].size;
+        }
+
+        if (uploadSize > 20 * 1024 * 1024) {
+            $(".upload_background .file_name").text("Over 20MB selected");
+            return;
+        }
+
+        if (parseInt(uploadSize) > 1024 * 1024)
+            sizeToString = parseInt(parseInt(uploadSize) / (1024 * 1024)) + "MB";
+        else if (parseInt(uploadSize) > 1024)
+            sizeToString = parseInt(parseInt(uploadSize) / 1024) + "KB";
+        else
+            sizeToString = parseInt(uploadSize) + "Byte";
+
+
+        $(".upload_background .file_name").text(count + " Files(" + sizeToString + ") Selected");
+        $(".upload_background .file_name").css("padding-top", "10px");
+        $(".upload_background .btn_file_wrapper").hide();
+    }
+
+    //window.onbeforeunload = WindowCloseHanlder;
+    //function WindowCloseHanlder() {
+    //    parent.window.body_dimmed_close();
+    //}
+
+    function showLoading() {
+        $(".upload_background .btn_file_wrapper").hide();
+        $(".loading").show();
+        $(".loading_icon").show();
+    }
+
+    $(".upload_background .btn_close").click(function () {
+        parent.window.php_close_background_image_upload();
+    });
+
+    function php_uploading(val) {
+        $(".loading_text").text(val);
+    }
+
+    // 파일 체크 함수 구현
+    $.ajax({
+        type: "POST",
+        url: '/upload_background_image_completed.php',
+        data: 'count=1',
+        dataType: 'text',
+        success: function (result) {
+            console.log(result);
+            usedDataSize = parseInt(result);
+
+            var text = new String();
+
+            if (parseInt(result) > (1024 * 1024))
+                text = parseInt(parseInt(result) / (1024 * 1024)) + "MB of 100MB used"
+            else if (parseInt(result) > 1024 )
+                text = parseInt(parseInt(result) / 1024) + "KB of 100MB used"
+            else
+                text = parseInt(result) + "Byte of 100MB used"
+
+            $(".caution").text(text);
+        }
+    });
+</script>
